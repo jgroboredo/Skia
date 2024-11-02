@@ -15,6 +15,7 @@ BuildRequires:  tar
 BuildRequires:  wget
 BuildRequires:  clang
 BuildRequires:  python3
+BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(harfbuzz)
 BuildRequires:  pkgconfig(icu-uc)
 BuildRequires:  pkgconfig(freetype2)

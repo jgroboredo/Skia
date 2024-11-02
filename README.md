@@ -33,6 +33,7 @@ Link the library using pkg-config for `Skia`.
 - wget 
 - tar 
 - python3
+- ninja
 - harfbuzz
 - icu-uc
 - freetype2
