@@ -16,6 +16,9 @@ BuildRequires:  wget
 BuildRequires:  clang
 BuildRequires:  python3
 BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(egl)
+BuildRequires:  pkgconfig(gl)
+BuildRequires:  pkgconfig(glesv2)
 BuildRequires:  pkgconfig(harfbuzz)
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(icu-uc)
@@ -38,10 +41,11 @@ developing applications that use %{name}.
 
 %prep
 rm -rf repo
-rm -f src.tar.gz
-mkdir -p repo
-wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
-tar --strip-components=1 -xzvf src.tar.gz -C repo
+#rm -f src.tar.gz
+#mkdir -p repo
+#wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
+#tar --strip-components=1 -xzvf src.tar.gz -C repo
+git clone https://github.com/CuarzoSoftware/Skia.git repo
 
 %build
 echo "Nothing to do here."

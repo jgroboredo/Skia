@@ -34,6 +34,9 @@ Link the library using pkg-config for `Skia`.
 - tar 
 - python3
 - ninja
+- egl
+- gl
+- glesv2
 - harfbuzz
 - fontconfig
 - icu-uc
