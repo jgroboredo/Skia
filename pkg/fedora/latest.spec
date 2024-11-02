@@ -13,8 +13,6 @@ URL:            https://github.com/CuarzoSoftware/Skia
 BuildRequires:  git
 BuildRequires:  tar
 BuildRequires:  wget
-BuildRequires:  clang
-BuildRequires:  clang17
 BuildRequires:  gcc-c++
 BuildRequires:  python3
 BuildRequires:  ninja-build

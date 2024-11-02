@@ -208,8 +208,8 @@ fi
 bin/gn gen out/Shared --args='
 target_os="linux" 
 target_cpu="'$SK_ARCH'" 
-cc="clang" 
-cxx="clang++" 
+cc="gcc" 
+cxx="g++" 
 is_debug=false
 is_official_build=true 
 is_component_build=true 
