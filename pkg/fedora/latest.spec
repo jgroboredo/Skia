@@ -35,15 +35,14 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-#rm -rf repo
-#rm -f src.tar.gz
-#mkdir -p repo
-#wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
-#tar --strip-components=1 -xzvf src.tar.gz -C repo
+rm -rf repo
+rm -f src.tar.gz
+mkdir -p repo
+wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
+tar --strip-components=1 -xzvf src.tar.gz -C repo
 
 %build
-pushd repo
-echo "Building Skia"
+echo "Nothing to do here."
 
 %install
 pushd repo
