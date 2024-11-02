@@ -4,7 +4,7 @@ ARCH_X64=("x64" "x86_64" "amd64")
 ARCH_X86=("x86" "i386" "i486" "i586" "i686")
 ARCH_ARM=("arm" "armel" "armhf")
 ARCH_ARM64=("arm64" "aarch64")
-BIN_DEPS=("git" "wget" "tar" "python3")
+BIN_DEPS=("git" "wget" "tar" "python3" "gcc" "g++")
 LIB_DEPS=("egl" "gl" "glesv2" "harfbuzz" "icu-uc" "fontconfig" "freetype2" "zlib" "libpng" "libwebp" "libjpeg")
 
 help() {

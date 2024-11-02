@@ -41,11 +41,10 @@ developing applications that use %{name}.
 
 %prep
 rm -rf repo
-#rm -f src.tar.gz
-#mkdir -p repo
-#wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
-#tar --strip-components=1 -xzvf src.tar.gz -C repo
-git clone https://github.com/CuarzoSoftware/Skia.git repo
+rm -f src.tar.gz
+mkdir -p repo
+wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
+tar --strip-components=1 -xzvf src.tar.gz -C repo
 
 %build
 echo "Nothing to do here."

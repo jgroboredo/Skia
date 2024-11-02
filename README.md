@@ -33,6 +33,7 @@ Link the library using pkg-config for `Skia`.
 - wget 
 - tar 
 - python3
+- gcc
 - ninja
 - egl
 - gl
@@ -52,10 +53,10 @@ Link the library using pkg-config for `Skia`.
 $ git clone https://github.com/CuarzoSoftware/Skia/
 $ cd Skia
 
-# Run without params to see avaliable options
+# Run without params to see available options
 $ ./install.sh
 
-# Build & install
+# Build & Install
 $ SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include ./install.sh
 
 # Later...

@@ -5,5 +5,4 @@
 5. Run pkg/release.sh
 6. Merge devel branch to main and push.
 7. Create GitHub release with tag v[major].[minor].[patch]-[build].
-8. Run doxygen GitHub action.
-9. Rebuild Fedora Copr.
+8. Rebuild Fedora Copr.
