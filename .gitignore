@@ -1,0 +1,8 @@
+**/build**
+**.user
+**.DS_Store
+**.autosave
+**.vscode
+**.mkv
+/tmp
+uninstall.sh
