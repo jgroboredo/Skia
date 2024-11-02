@@ -35,6 +35,7 @@ Link the library using pkg-config for `Skia`.
 - python3
 - ninja
 - harfbuzz
+- fontconfig
 - icu-uc
 - freetype2
 - zlib

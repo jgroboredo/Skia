@@ -17,6 +17,7 @@ BuildRequires:  clang
 BuildRequires:  python3
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(harfbuzz)
+BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(icu-uc)
 BuildRequires:  pkgconfig(freetype2)
 BuildRequires:  pkgconfig(zlib)

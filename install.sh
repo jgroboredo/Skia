@@ -5,7 +5,7 @@ ARCH_X86=("x86" "i386" "i486" "i586" "i686")
 ARCH_ARM=("arm" "armel" "armhf")
 ARCH_ARM64=("arm64" "aarch64")
 BIN_DEPS=("git" "wget" "tar" "python3")
-LIB_DEPS=("harfbuzz" "icu-uc" "freetype2" "zlib" "libpng" "libwebp" "libjpeg")
+LIB_DEPS=("harfbuzz" "icu-uc" "fontconfig" "freetype2" "zlib" "libpng" "libwebp" "libjpeg")
 
 help() {
     echo -e "\nUsage: SK_ARCH=ARCH SK_PREFIX=PREFIX SK_LIBDIR=LIBDIR SK_INCDIR=INCDIR $0"
