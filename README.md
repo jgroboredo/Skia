@@ -14,10 +14,10 @@ This repository contains a script for easily installing a components build of [S
 
 ## Fedora
 
-Install from [ehopperdietzel/cuarzo](https://copr.fedorainfracloud.org/coprs/ehopperdietzel/cuarzo/) COPR:
+Install from [cuarzo/software](https://copr.fedorainfracloud.org/coprs/cuarzo/software/) COPR:
 
 ```bash
-$ sudo dnf copr enable ehopperdietzel/cuarzo
+$ sudo dnf copr enable cuarzo/software
 $ sudo dnf install cuarzo-skia-devel
 ```
 
