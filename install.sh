@@ -270,14 +270,14 @@ find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/modules \;
 
 # Gen pkgconfig file
 cat <<EOF > $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/Skia.pc
-includedir=$SK_INCDIR
+includedir=$SK_INCDIR/Skia
 libdir=$SK_LIBDIR
 
 Name: Skia
 Description: Skia is a complete 2D graphic library for drawing Text, Geometries, and Images.
 Version: $SK_VERSION
 Libs: -L$SK_LIBDIR -lskia -lskottie -lskparagraph -lcompression_utils_portable -lpathkit -lskcms -lskresources -lskshaper -lskunicode -ldng_sdk -lpiex -lsksg -lsktext -lwuffs
-Cflags: -I$SK_INCDIR -DSK_GL -DSK_GANESH
+Cflags: -I$SK_INCDIR/Skia -DSK_GL -DSK_GANESH
 EOF
 
 echo -e "\nInstalling Skia.pc into $SK_FINAL_PKG_DIR."
