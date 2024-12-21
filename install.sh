@@ -17,7 +17,7 @@ help() {
     echo -e "    arm64 or alias [aarch64]"
     
     echo -e "- PREFIX: Install prefix path. For example SK_PREFIX=/"
-    echo -e "- LIBDIR: Libraries install path relative to SK_PREFIX. For example SK_LIBDIR=/usr/lib -> final path SK_PREFIX/usr/lib/Skia"
+    echo -e "- LIBDIR: Libraries install path relative to SK_PREFIX. For example SK_LIBDIR=/usr/lib -> final path SK_PREFIX/usr/lib"
     echo -e "- INCDIR: Headers install path relative to SK_PREFIX. For example SK_INCDIR=/usr/include -> final path SK_PREFIX/usr/include/Skia\n"
 }
 
@@ -157,7 +157,6 @@ done
 # Summary
 SK_FINAL_LIBDIR=$(concat_paths $SK_PREFIX  $SK_LIBDIR)
 SK_FINAL_PKG_DIR=$(concat_paths $SK_FINAL_LIBDIR "/pkgconfig")
-SK_FINAL_LIBDIR=$(concat_paths $SK_FINAL_LIBDIR "/Skia")
 SK_FINAL_INCDIR=$(concat_paths $SK_PREFIX $SK_INCDIR)
 SK_FINAL_INCDIR=$(concat_paths $SK_FINAL_INCDIR "/Skia")
 mkdir -p $SK_FINAL_INCDIR
@@ -271,28 +270,22 @@ find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/modules \;
 
 # Gen pkgconfig file
 cat <<EOF > $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/Skia.pc
+prefix=$SK_PREFIX
+includedir=$SK_FINAL_INCDIR
+libdir=$SK_FINAL_LIBDIR
+
 Name: Skia
 Description: Skia is a complete 2D graphic library for drawing Text, Geometries, and Images.
 Version: $SK_VERSION
-Libs: -L$SK_LIBDIR/Skia -lskia -lskottie -lskparagraph -lcompression_utils_portable -lpathkit -lskcms -lskresources -lskshaper -lskunicode -ldng_sdk -lpiex -lsksg -lsktext -lwuffs
-Cflags: -I$SK_INCDIR/Skia -DSK_GL -DSK_GANESH
+Libs: -L$SK_FINAL_LIBDIR -lskia -lskottie -lskparagraph -lcompression_utils_portable -lpathkit -lskcms -lskresources -lskshaper -lskunicode -ldng_sdk -lpiex -lsksg -lsktext -lwuffs
+Cflags: -I$SK_FINAL_INCDIR -DSK_GL -DSK_GANESH
 EOF
 
 echo -e "\nInstalling Skia.pc into $SK_FINAL_PKG_DIR."
 cp $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/Skia.pc $SK_FINAL_PKG_DIR
 cd $SCRIPT_DIR
 
-# Create uninstaller
-
-cat <<EOF > $SCRIPT_DIR/uninstall.sh
-#!/bin/bash
-rm -rfv $SK_FINAL_LIBDIR
-rm -rfv $SK_FINAL_INCDIR
-rm -rfv $SK_FINAL_PKG_DIR/Skia.pc
-EOF
-
-chmod +x $SCRIPT_DIR/uninstall.sh
 summary
-echo -e "Installation complete. Use uninstall.sh to remove.\n"
+echo -e "Installation complete.\n"
 
 

@@ -1,5 +1,5 @@
 %global basever 0.38.2
-%global origrel 1
+%global origrel 2
 %global somajor 0
 
 Name:           cuarzo-skia
@@ -56,7 +56,20 @@ SK_ARCH=%{_arch} SK_PREFIX=%{buildroot} SK_LIBDIR=%{_libdir} SK_INCDIR=%{_includ
 %files
 %license repo/LICENSE
 %doc repo/BUILD repo/CHANGES repo/VERSION
-%{_libdir}/Skia/
+%{_libdir}/libcompression_utils_portable.a
+%{_libdir}/libdng_sdk.a
+%{_libdir}/libpathkit.a
+%{_libdir}/libpiex.a
+%{_libdir}/libskcms.a
+%{_libdir}/libskresources.a
+%{_libdir}/libwuffs.a
+%{_libdir}/libskia.so
+%{_libdir}/libskottie.so
+%{_libdir}/libskparagraph.so
+%{_libdir}/libsksg.so
+%{_libdir}/libskshaper.so
+%{_libdir}/libsktext.so
+%{_libdir}/libskunicode.so
 
 %files devel
 %doc repo/README.md
@@ -64,5 +77,6 @@ SK_ARCH=%{_arch} SK_PREFIX=%{buildroot} SK_LIBDIR=%{_libdir} SK_INCDIR=%{_includ
 %{_libdir}/pkgconfig/Skia.pc
 
 %changelog
-* Sat Nov 02 2024 Eduardo Hopperdietzel <ehopperdietzel@gmail.com> - %{basever}-%{origrel}
-- First release.
+* Sat Dec 21 2024 Eduardo Hopperdietzel <ehopperdietzel@gmail.com> - %{basever}-%{origrel}
+- Removed the /Skia suffix from libdir.
+- Removed uninstaller.sh.

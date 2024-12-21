@@ -1,4 +1,3 @@
-
 <h1 style="margin-top:0px;padding-top:0px">Skia</h1>
 
 <p align="left">
@@ -14,7 +13,7 @@ This repository contains a script for easily installing a components build of [S
 
 ## Fedora
 
-Install from [cuarzo/software](https://copr.fedorainfracloud.org/coprs/cuarzo/software/) COPR:
+Install a prebuilt version from the [cuarzo/software](https://copr.fedorainfracloud.org/coprs/cuarzo/software/) COPR:
 
 ```bash
 $ sudo dnf copr enable cuarzo/software
@@ -29,9 +28,9 @@ Link the library using pkg-config for `Skia`.
 
 ### Dependencies
 
-- git 
-- wget 
-- tar 
+- git
+- wget
+- tar
 - python3
 - gcc
 - ninja
@@ -57,8 +56,5 @@ $ cd Skia
 $ ./install.sh
 
 # Build & Install
-$ SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include ./install.sh
-
-# Later...
-$ ./uninstall.sh
+$ sudo -E SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include ./install.sh
 ```
