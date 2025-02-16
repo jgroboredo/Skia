@@ -43,7 +43,7 @@ developing applications that use %{name}.
 rm -rf repo
 rm -f src.tar.gz
 mkdir -p repo
-wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-%{origrel}.tar.gz
+wget -O src.tar.gz %{url}/archive/refs/tags/v%{basever}-1.tar.gz
 tar --strip-components=1 -xzvf src.tar.gz -C repo
 
 %build
