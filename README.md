@@ -5,7 +5,7 @@
     <img src="https://img.shields.io/badge/license-BSD--3-blue.svg" alt="Skia is released under the BSD-3 license." />
   </a>
   <a href="https://github.com/CuarzoSoftware/Skia">
-    <img src="https://img.shields.io/badge/version-0.38.2-brightgreen" alt="Current Skia version." />
+    <img src="https://img.shields.io/badge/version-134.0.0-brightgreen" alt="Current Skia version." />
   </a>
 </p>
 
@@ -56,5 +56,5 @@ $ cd Skia
 $ ./install.sh
 
 # Build & Install
-$ sudo -E SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include ./install.sh
+$ SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include sudo -E ./install.sh
 ```

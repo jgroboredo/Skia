@@ -56,20 +56,18 @@ SK_ARCH=%{_arch} SK_PREFIX=%{buildroot} SK_LIBDIR=%{_libdir} SK_INCDIR=%{_includ
 %files
 %license repo/LICENSE
 %doc repo/BUILD repo/CHANGES repo/VERSION
-%{_libdir}/libcompression_utils_portable.a
-%{_libdir}/libdng_sdk.a
-%{_libdir}/libpathkit.a
-%{_libdir}/libpiex.a
-%{_libdir}/libskcms.a
-%{_libdir}/libskresources.a
-%{_libdir}/libwuffs.a
-%{_libdir}/libskia.so
-%{_libdir}/libskottie.so
+%{_libdir}/libbentleyottmann.so
 %{_libdir}/libskparagraph.so
-%{_libdir}/libsksg.so
-%{_libdir}/libskshaper.so
-%{_libdir}/libsktext.so
-%{_libdir}/libskunicode.so
+%{_libdir}/libskunicode_core.so
+%{_libdir}/libskia.so
+%{_libdir}/libskshaper.so 
+%{_libdir}/libskunicode_icu.so
+%{_libdir}/libcompression_utils_portable.a 
+%{_libdir}/libpathkit.a 
+%{_libdir}/libskcms.a
+%{_libdir}/libdng_sdk.a
+%{_libdir}/libpiex.a 
+%{_libdir}/libwuffs.a
 
 %files devel
 %doc repo/README.md

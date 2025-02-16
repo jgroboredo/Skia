@@ -24,6 +24,7 @@ help() {
 summary() {
 	echo -e "\n**************************** SUMMARY ****************************\n"
 	echo "  Skia Version:                      $SK_VERSION"
+    echo "  Skia Commit:                       $SK_COMMIT"
 	echo "  Target Arch:                       $SK_ARCH"
 	echo "  Install Prefix:                    $SK_PREFIX"
 	echo "  Final Library Install Path:        $SK_FINAL_LIBDIR"
@@ -59,6 +60,7 @@ in_array() {
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SK_VERSION=$(cat $SCRIPT_DIR/VERSION)
+SK_COMMIT=$(cat $SCRIPT_DIR/COMMIT)
 
 if [ -z "${SK_PREFIX}" ]; then
     echo -e "\nError: Missing install prefix."
@@ -177,21 +179,24 @@ fi
 
 export PATH="${PWD}/depot_tools:${PATH}"
 
-if [ ! -e "$TMP_DIR/build/$SK_VERSION.tar.gz" ]; then
-    wget https://github.com/google/skia/archive/refs/tags/canvaskit/$SK_VERSION.tar.gz
-    tar -xvf $SK_VERSION.tar.gz
+if [ ! -e "$TMP_DIR/build/skia" ]; then
+    git clone --depth 1 --single-branch --branch main https://skia.googlesource.com/skia
+    cd skia
+    git fetch --depth 1 origin $SK_COMMIT
+    git reset --hard $SK_COMMIT
+    cd ..
 else
-    echo -e "\n$SK_VERSION.tar.gz already downloaded, skipping..."
+    echo -e "\nSkia repo already cloned, skipping..."
 fi
 
-cd skia-canvaskit-$SK_VERSION
+cd skia
 
 # For some reason this sometimes fails the first time
 
 max_retries=5
 attempt=0
 
-if [ ! -e "$TMP_DIR/build/skia-canvaskit-$SK_VERSION/bin/gn" ]; then
+if [ ! -e "$TMP_DIR/build/skia/bin/gn" ]; then
     until python3 tools/git-sync-deps; do
         attempt=$((attempt+1))
         if [ $attempt -ge $max_retries ]; then
@@ -208,29 +213,32 @@ bin/gn gen out/Shared --args='
 target_os="linux" 
 target_cpu="'$SK_ARCH'" 
 cc="gcc" 
-cxx="g++" 
+cxx="g++"
 is_debug=false
 is_official_build=true 
 is_component_build=true 
-text_tests_enabled=false
 
 skia_compile_modules=true 
 skia_compile_sksl_tests=false
+skunicode_tests_enabled=false
+skia_enable_skshaper_tests=false
+paragraph_tests_enabled=false
+
+skia_enable_fontmgr_empty=true
 
 skia_enable_tools=false
 skia_enable_gpu=true 
-skia_enable_fontmgr_custom_directory=false
-skia_enable_sksl=true 
 skia_enable_skshaper=true
 skia_enable_svg=true 
 skia_enable_pdf=false
+skia_enable_skparagraph=true
+skia_enable_skunicode=true
 
 skia_use_harfbuzz=true          skia_use_system_harfbuzz=true
 skia_use_icu=true               skia_use_system_icu=true 
 skia_use_freetype=true          skia_use_system_freetype2=true 
 skia_use_zlib=true              skia_use_system_zlib=true 
 
-skia_use_sfntly=true
 skia_use_gl=true
 skia_use_egl=true                      
 skia_use_libheif=true
@@ -239,6 +247,7 @@ skia_use_system_libpng=true
 skia_use_system_libwebp=true 
 skia_use_system_libjpeg_turbo=true
 
+skia_use_x11=false
 skia_use_angle=false
 skia_use_vulkan=false
 skia_use_metal=false
@@ -257,31 +266,34 @@ fi
 
 echo -e "\nInstalling libraries into $SK_FINAL_LIBDIR:"
 mkdir -p $SK_FINAL_LIBDIR
-cp -v $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/*.a $SK_FINAL_LIBDIR
-cp -v $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/*.so $SK_FINAL_LIBDIR
+cp -v $TMP_DIR/build/skia/out/Shared/*.a $SK_FINAL_LIBDIR
+cp -v $TMP_DIR/build/skia/out/Shared/*.so $SK_FINAL_LIBDIR
 
 echo -e "\nInstalling headers into $SK_FINAL_INCDIR:"
 mkdir -p $SK_FINAL_INCDIR/include
 mkdir -p $SK_FINAL_INCDIR/modules
-cd $TMP_DIR/build/skia-canvaskit-$SK_VERSION/include
+mkdir -p $SK_FINAL_INCDIR/src
+cd $TMP_DIR/build/skia/include
 find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/include \;
-cd $TMP_DIR/build/skia-canvaskit-$SK_VERSION/modules
+cd $TMP_DIR/build/skia/modules
 find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/modules \;
+cd $TMP_DIR/build/skia/src
+find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/src \;
 
 # Gen pkgconfig file
-cat <<EOF > $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/Skia.pc
+cat <<EOF > $TMP_DIR/build/skia/out/Shared/Skia.pc
 includedir=$SK_INCDIR/Skia
 libdir=$SK_LIBDIR
 
 Name: Skia
 Description: Skia is a complete 2D graphic library for drawing Text, Geometries, and Images.
 Version: $SK_VERSION
-Libs: -L$SK_LIBDIR -lskia -lskottie -lskparagraph -lcompression_utils_portable -lpathkit -lskcms -lskresources -lskshaper -lskunicode -ldng_sdk -lpiex -lsksg -lsktext -lwuffs
-Cflags: -I$SK_INCDIR/Skia -DSK_GL -DSK_GANESH
+Libs: -L$SK_LIBDIR -lskia -lskunicode_core -lskunicode_icu -lskparagraph -lcompression_utils_portable -lpathkit -lskcms -lskshaper -ldng_sdk -lpiex -lwuffs
+Cflags: -I$SK_INCDIR/Skia -DSK_GL -DSK_GANESH -DSK_UNICODE_ICU_IMPLEMENTATION
 EOF
 
 echo -e "\nInstalling Skia.pc into $SK_FINAL_PKG_DIR."
-cp $TMP_DIR/build/skia-canvaskit-$SK_VERSION/out/Shared/Skia.pc $SK_FINAL_PKG_DIR
+cp $TMP_DIR/build/skia/out/Shared/Skia.pc $SK_FINAL_PKG_DIR
 cd $SCRIPT_DIR
 
 summary

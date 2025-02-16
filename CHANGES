@@ -1,3 +1,11 @@
+Skia (134.0.0)
+
+  * Sources are now obtained from a specific commit in the main branch, as indicated by the COMMIT file.
+  * Added missing compiler flags to Skia.pc to enable ICU support for SkParagraph.
+
+ -- Eduardo Hopperdietzel <ehopperdietzel@gmail.com>  Sat, 15 Feb 2025 21:32:18 -0300
+
+
 Skia (0.38.2-2)
 
   * Removed the /Skia suffix from libdir.
