@@ -19,6 +19,9 @@ help() {
     echo -e "- PREFIX: Install prefix path. For example SK_PREFIX=/"
     echo -e "- LIBDIR: Libraries install path relative to SK_PREFIX. For example SK_LIBDIR=/usr/lib -> final path SK_PREFIX/usr/lib"
     echo -e "- INCDIR: Headers install path relative to SK_PREFIX. For example SK_INCDIR=/usr/include -> final path SK_PREFIX/usr/include/Skia\n"
+
+    echo -e "System default ld library search paths:"
+    ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012
 }
 
 summary() {
