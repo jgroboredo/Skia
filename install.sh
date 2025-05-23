@@ -96,8 +96,6 @@ else
     fi
 fi
 
-mkdir -p $SK_PREFIX
-
 if [ -z "${SK_LIBDIR}" ]; then
     echo -e "\nError: Missing library install path."
     help
@@ -183,9 +181,12 @@ SK_FINAL_LIBDIR=$(concat_paths $SK_PREFIX $SK_LIBDIR)
 SK_FINAL_PKG_DIR=$(concat_paths $SK_FINAL_LIBDIR "/pkgconfig")
 SK_FINAL_INCDIR=$(concat_paths $SK_PREFIX $SK_INCDIR)
 SK_FINAL_INCDIR=$(concat_paths $SK_FINAL_INCDIR "/Skia")
-mkdir -p $SK_FINAL_INCDIR
-mkdir -p $SK_FINAL_LIBDIR
-mkdir -p $SK_FINAL_PKG_DIR
+
+echo "Creating final destination paths..."
+paths_to_create=("${SK_PREFIX}" "${SK_FINAL_INCDIR}" "${SK_FINAL_LIBDIR }" "${SK_FINAL_PKG_DIR}")
+echo "Invoking sudo to run: \"mkdir -p ${paths_to_create[*]}\""
+sudo sh -c "mkdir -p ${paths_to_create[*]}"
+
 summary
 
 TMP_DIR=${SCRIPT_DIR}/tmp
