@@ -287,24 +287,37 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# TODO: instead of calling sudo several times
-# escalate privilegies once only
-echo -e "\nInstalling libraries into $SK_FINAL_LIBDIR:"
-sudo mkdir -p $SK_FINAL_LIBDIR
-sudo cp -v $TMP_DIR/build/skia/out/Shared/*.a $SK_FINAL_LIBDIR
-sudo cp -v $TMP_DIR/build/skia/out/Shared/*.so $SK_FINAL_LIBDIR
+echo -e "\nInstalling libraries into $SK_FINAL_LIBDIR"
+echo -e "\nInstalling headers into $SK_FINAL_INCDIR"
+echo -e "\nInstalling Skia.pc into $SK_FINAL_PKG_DIR"
 
-echo -e "\nInstalling headers into $SK_FINAL_INCDIR:"
-sudo mkdir -p $SK_FINAL_INCDIR/include
-sudo mkdir -p $SK_FINAL_INCDIR/modules
-sudo mkdir -p $SK_FINAL_INCDIR/src
-# TODO: replace cp commands by install command
-cd $TMP_DIR/build/skia/include
-find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/include \;
-cd $TMP_DIR/build/skia/modules
-find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/modules \;
-cd $TMP_DIR/build/skia/src
-find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/src \;
+# escalate privilegies once only
+install_command=()
+install_command+=( "install -v -D -m644 $TMP_DIR/build/skia/out/Shared/*.a $SK_FINAL_LIBDIR" )
+install_command+=( "&&" )
+install_command+=( "install -v -D -m644 $TMP_DIR/build/skia/out/Shared/*.so $SK_FINAL_LIBDIR" )
+install_command+=( "&&" )
+
+install_command+=( "mkdir -p $SK_FINAL_INCDIR/include" )
+install_command+=( "&&" )
+install_command+=( "mkdir -p $SK_FINAL_INCDIR/modules" )
+install_command+=( "&&" )
+install_command+=( "mkdir -p $SK_FINAL_INCDIR/src" )
+install_command+=( "&&" )
+
+
+install_command+=( "cd $TMP_DIR/build/skia/include" )
+install_command+=( "&&" )
+install_command+=( "find . -name \"*.h\" -exec cp -v --parents {} $SK_FINAL_INCDIR/include \;" )
+install_command+=( "&&" )
+install_command+=( "cd $TMP_DIR/build/skia/modules" )
+install_command+=( "&&" )
+install_command+=( "find . -name \"*.h\" -exec cp -v --parents {} $SK_FINAL_INCDIR/modules \;" )
+install_command+=( "&&" )
+install_command+=( "cd $TMP_DIR/build/skia/src" )
+install_command+=( "&&" )
+install_command+=( "find . -name \"*.h\" -exec cp -v --parents {} $SK_FINAL_INCDIR/src \;" )
+install_command+=( "&&" )
 
 # Gen pkgconfig file
 cat <<EOF >$TMP_DIR/build/skia/out/Shared/Skia.pc
@@ -318,25 +331,14 @@ Libs: -L$SK_LIBDIR -lskia -lskunicode_core -lskunicode_icu -lskparagraph -lcompr
 Cflags: -I$SK_INCDIR/Skia -DSK_GL -DSK_GANESH -DSK_UNICODE_ICU_IMPLEMENTATION
 EOF
 
-echo -e "\nInstalling Skia.pc into $SK_FINAL_PKG_DIR."
-sudo cp $TMP_DIR/build/skia/out/Shared/Skia.pc $SK_FINAL_PKG_DIR
+install_command+=( "cp $TMP_DIR/build/skia/out/Shared/Skia.pc $SK_FINAL_PKG_DIR" )
+install_command+=( "&&" )
+install_command+=( "ldconfig" )
+
+sudo sh -c "${install_command[*]}"
+
 cd $SCRIPT_DIR
 
 summary
 echo -e "Installation complete.\n"
 
-
-
-
-
-# # License
-#     install -D -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-
-#     # Library
-#     install -D -m644 out/Debug/libskia.so "$pkgdir/usr/lib/libskia.so"
-
-#     # Headers
-#     find include -type f -and -name "*.h" -exec install -v -D -m644 {} "$pkgdir/usr/include/"{} \; -print
-#     find modules -type f -and -name "*.h" -exec install -v -D -m644 {} "$pkgdir/usr/include/"{} \; -print
-#     find src -type f -and -name "*.h" -exec install -v -D -m644 {} "$pkgdir/usr/include/"{} \; -print
-# }
