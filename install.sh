@@ -264,21 +264,24 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+# TODO: instead of calling sudo several times
+# escalate privilegies once only
 echo -e "\nInstalling libraries into $SK_FINAL_LIBDIR:"
-mkdir -p $SK_FINAL_LIBDIR
-cp -v $TMP_DIR/build/skia/out/Shared/*.a $SK_FINAL_LIBDIR
-cp -v $TMP_DIR/build/skia/out/Shared/*.so $SK_FINAL_LIBDIR
+sudo mkdir -p $SK_FINAL_LIBDIR
+sudo cp -v $TMP_DIR/build/skia/out/Shared/*.a $SK_FINAL_LIBDIR
+sudo cp -v $TMP_DIR/build/skia/out/Shared/*.so $SK_FINAL_LIBDIR
 
 echo -e "\nInstalling headers into $SK_FINAL_INCDIR:"
-mkdir -p $SK_FINAL_INCDIR/include
-mkdir -p $SK_FINAL_INCDIR/modules
-mkdir -p $SK_FINAL_INCDIR/src
+sudo mkdir -p $SK_FINAL_INCDIR/include
+sudo mkdir -p $SK_FINAL_INCDIR/modules
+sudo mkdir -p $SK_FINAL_INCDIR/src
+# TODO: replace cp commands by install command
 cd $TMP_DIR/build/skia/include
-find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/include \;
+find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/include \;
 cd $TMP_DIR/build/skia/modules
-find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/modules \;
+find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/modules \;
 cd $TMP_DIR/build/skia/src
-find . -name "*.h" -exec cp -v --parents {} $SK_FINAL_INCDIR/src \;
+find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/src \;
 
 # Gen pkgconfig file
 cat <<EOF > $TMP_DIR/build/skia/out/Shared/Skia.pc
@@ -293,7 +296,7 @@ Cflags: -I$SK_INCDIR/Skia -DSK_GL -DSK_GANESH -DSK_UNICODE_ICU_IMPLEMENTATION
 EOF
 
 echo -e "\nInstalling Skia.pc into $SK_FINAL_PKG_DIR."
-cp $TMP_DIR/build/skia/out/Shared/Skia.pc $SK_FINAL_PKG_DIR
+sudo cp $TMP_DIR/build/skia/out/Shared/Skia.pc $SK_FINAL_PKG_DIR
 cd $SCRIPT_DIR
 
 summary
