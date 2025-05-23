@@ -56,5 +56,5 @@ $ cd Skia
 $ ./install.sh
 
 # Build & Install
-$ SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include sudo -E ./install.sh
+$ SK_ARCH=x64 SK_PREFIX=/ SK_LIBDIR=/usr/lib64 SK_INCDIR=/usr/include ./install.sh
 ```
