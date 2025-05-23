@@ -183,7 +183,7 @@ SK_FINAL_INCDIR=$(concat_paths $SK_PREFIX $SK_INCDIR)
 SK_FINAL_INCDIR=$(concat_paths $SK_FINAL_INCDIR "/Skia")
 
 echo "Creating final destination paths..."
-paths_to_create=("${SK_PREFIX}" "${SK_FINAL_INCDIR}" "${SK_FINAL_LIBDIR }" "${SK_FINAL_PKG_DIR}")
+paths_to_create=("${SK_PREFIX}" "${SK_FINAL_INCDIR}" "${SK_FINAL_LIBDIR}" "${SK_FINAL_PKG_DIR}")
 echo "Invoking sudo to run: \"mkdir -p ${paths_to_create[*]}\""
 sudo sh -c "mkdir -p ${paths_to_create[*]}"
 
@@ -324,3 +324,19 @@ cd $SCRIPT_DIR
 
 summary
 echo -e "Installation complete.\n"
+
+
+
+
+
+# # License
+#     install -D -m644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+#     # Library
+#     install -D -m644 out/Debug/libskia.so "$pkgdir/usr/lib/libskia.so"
+
+#     # Headers
+#     find include -type f -and -name "*.h" -exec install -v -D -m644 {} "$pkgdir/usr/include/"{} \; -print
+#     find modules -type f -and -name "*.h" -exec install -v -D -m644 {} "$pkgdir/usr/include/"{} \; -print
+#     find src -type f -and -name "*.h" -exec install -v -D -m644 {} "$pkgdir/usr/include/"{} \; -print
+# }
