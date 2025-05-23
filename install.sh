@@ -15,46 +15,46 @@ help() {
     echo -e "    x86   or alias [i386, i486, i586, i686]"
     echo -e "    arm   or alias [armel, armhf]"
     echo -e "    arm64 or alias [aarch64]"
-    
+
     echo -e "- PREFIX: Install prefix path. For example SK_PREFIX=/"
     echo -e "- LIBDIR: Libraries install path relative to SK_PREFIX. For example SK_LIBDIR=/usr/lib -> final path SK_PREFIX/usr/lib"
     echo -e "- INCDIR: Headers install path relative to SK_PREFIX. For example SK_INCDIR=/usr/include -> final path SK_PREFIX/usr/include/Skia\n"
 
     echo -e "System default ld library search paths:"
-    local ld_search_paths=$( ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012 )
+    local ld_search_paths=$(ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012)
     echo ""
     for path in ${ld_search_paths[@]}; do
-      echo " - $path"
+        echo " - $path"
     done
 
     echo ""
     echo -e "System default pc search paths:"
-    local pc_paths=$( pkg-config --variable pc_path pkg-config | tr -s ':' \\012 )
+    local pc_paths=$(pkg-config --variable pc_path pkg-config | tr -s ':' \\012)
     echo ""
     for path in ${pc_paths[@]}; do
-      echo " - $path"
+        echo " - $path"
     done
 }
 
 summary() {
-	echo -e "\n**************************** SUMMARY ****************************\n"
-	echo "  Skia Version:                      $SK_VERSION"
+    echo -e "\n**************************** SUMMARY ****************************\n"
+    echo "  Skia Version:                      $SK_VERSION"
     echo "  Skia Commit:                       $SK_COMMIT"
-	echo "  Target Arch:                       $SK_ARCH"
-	echo "  Install Prefix:                    $SK_PREFIX"
-	echo "  Final Library Install Path:        $SK_FINAL_LIBDIR"
-	echo "  Final Headers Install Path:        $SK_FINAL_INCDIR"
-	echo "  Final PKGCONFIG File Install Path: $SK_FINAL_PKG_DIR"  
-	echo -e "\n*****************************************************************\n"
+    echo "  Target Arch:                       $SK_ARCH"
+    echo "  Install Prefix:                    $SK_PREFIX"
+    echo "  Final Library Install Path:        $SK_FINAL_LIBDIR"
+    echo "  Final Headers Install Path:        $SK_FINAL_INCDIR"
+    echo "  Final PKGCONFIG File Install Path: $SK_FINAL_PKG_DIR"
+    echo -e "\n*****************************************************************\n"
 }
 
 concat_paths() {
     local path1="$1"
     local path2="$2"
-    
+
     # Remove any trailing slash from the first path
     path1="${path1%/}"
-    
+
     # Remove any leading slash from the second path
     path2="${path2#/}"
 
@@ -121,29 +121,29 @@ if [ -z "${SK_ARCH}" ]; then
     exit 1
 else
     TEST_ARCH=""
-    
+
     if in_array "$SK_ARCH" "${ARCH_X64[@]}"; then
         TEST_ARCH="x64"
     fi
-    
-    if  [ -z "$TEST_ARCH" ] && in_array "$SK_ARCH" "${ARCH_X86[@]}"; then
+
+    if [ -z "$TEST_ARCH" ] && in_array "$SK_ARCH" "${ARCH_X86[@]}"; then
         TEST_ARCH="x86"
     fi
-    
-    if  [ -z "$TEST_ARCH" ] && in_array "$SK_ARCH" "${ARCH_ARM[@]}"; then
+
+    if [ -z "$TEST_ARCH" ] && in_array "$SK_ARCH" "${ARCH_ARM[@]}"; then
         TEST_ARCH="arm"
     fi
-    
-    if  [ -z "$TEST_ARCH" ] && in_array "$SK_ARCH" "${ARCH_ARM64[@]}"; then
+
+    if [ -z "$TEST_ARCH" ] && in_array "$SK_ARCH" "${ARCH_ARM64[@]}"; then
         TEST_ARCH="arm64"
     fi
-    
-    if  [ -z "$TEST_ARCH" ]; then
+
+    if [ -z "$TEST_ARCH" ]; then
         echo -e "\nError: Invalid CPU arch: $SK_ARCH."
         help
         exit 1
     fi
-    
+
     SK_ARCH=$TEST_ARCH
 fi
 
@@ -152,7 +152,7 @@ fi
 echo -e "\nChecking binary dependencies:"
 
 for DEP in "${BIN_DEPS[@]}"; do
-    if command -v "$DEP" > /dev/null 2>&1; then
+    if command -v "$DEP" >/dev/null 2>&1; then
         echo "    Found $DEP."
     else
         echo "Error: $DEP not found."
@@ -172,7 +172,7 @@ for DEP in "${LIB_DEPS[@]}"; do
 done
 
 # Summary
-SK_FINAL_LIBDIR=$(concat_paths $SK_PREFIX  $SK_LIBDIR)
+SK_FINAL_LIBDIR=$(concat_paths $SK_PREFIX $SK_LIBDIR)
 SK_FINAL_PKG_DIR=$(concat_paths $SK_FINAL_LIBDIR "/pkgconfig")
 SK_FINAL_INCDIR=$(concat_paths $SK_PREFIX $SK_INCDIR)
 SK_FINAL_INCDIR=$(concat_paths $SK_FINAL_INCDIR "/Skia")
@@ -213,7 +213,7 @@ attempt=0
 
 if [ ! -e "$TMP_DIR/build/skia/bin/gn" ]; then
     until python3 tools/git-sync-deps; do
-        attempt=$((attempt+1))
+        attempt=$((attempt + 1))
         if [ $attempt -ge $max_retries ]; then
             echo "tools/git-sync-deps failed after $max_retries attempts."
             break
@@ -299,7 +299,7 @@ cd $TMP_DIR/build/skia/src
 find . -name "*.h" -exec sudo cp -v --parents {} $SK_FINAL_INCDIR/src \;
 
 # Gen pkgconfig file
-cat <<EOF > $TMP_DIR/build/skia/out/Shared/Skia.pc
+cat <<EOF >$TMP_DIR/build/skia/out/Shared/Skia.pc
 includedir=$SK_INCDIR/Skia
 libdir=$SK_LIBDIR
 
@@ -316,5 +316,3 @@ cd $SCRIPT_DIR
 
 summary
 echo -e "Installation complete.\n"
-
-
