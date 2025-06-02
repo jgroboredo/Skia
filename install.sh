@@ -21,7 +21,8 @@ help() {
     echo -e "- INCDIR: Headers install path relative to SK_PREFIX. For example SK_INCDIR=/usr/include -> final path SK_PREFIX/usr/include/Skia\n"
 
     echo -e "System default ld library search paths:"
-    local ld_search_paths=( $(ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012 | sed 's/SEARCH_DIR(\"=\(.*\)\")/\1/g') )
+
+    local ld_search_paths=( $(ld --verbose | grep SEARCH_DIR | tr -s ' ;' \\012 | sed 's/SEARCH_DIR(\"[=]\?\(.*\)\")/\1/g') )
     echo ""
     for path in ${ld_search_paths[@]}; do
         echo " - $path"
