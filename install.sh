@@ -31,16 +31,25 @@ help() {
     echo ""
     echo -e "System default pc search paths:"
     local pc_paths=$(pkg-config --variable pc_path pkg-config | tr -s ':' \\012)
+    local lib_dir=""
     echo ""
     for path in ${pc_paths[@]}; do
-        echo " - $path"
+        # Check intersection between pc_paths and ld_paths
+        print_str=" - $path"
+        if echo "${ld_search_paths[*]}" | grep -q "${path%/*}"; then
+            print_str="${print_str} (Found in LD Search Paths)"
+            if [ -z "${lib_dir}" ]; then
+                lib_dir="${path%/*}"
+            fi
+        fi
+        echo "${print_str}"
     done
 
     echo ""
     echo "Proposed config:"
     echo ""
     echo -e "- SK_PREFIX=/"
-    echo -e "- SK_LIBDIR=${ld_search_paths[0]}"
+    echo -e "- SK_LIBDIR=${lib_dir:="No suitable candidate!!"}"
     echo -e "- SK_INCDIR=/usr/local/include"
 }
 
